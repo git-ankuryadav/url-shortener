@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect
+from flask import Flask, request, redirect, render_template
 import random
 import string
 import sqlite3
@@ -35,18 +35,7 @@ def generate_code(length = 6):
 
 @app.route('/')
 def home():
-    return """
-    <html>
-    <body>
-    <h1>URL Shortener</h1>
-    <form action="/shorten" method="POST">
-        <input type="url" name="url"
-               placeholder="Enter your URL" required>
-        <button type="submit">Shorten URL</button>
-    </form>
-    </body>
-    </html>
-    """
+    return render_template("index.html")
 
 @app.route("/shorten", methods=["POST"])
 def shorten():
@@ -70,11 +59,7 @@ def shorten():
 
     short_url = request.host_url + code
 
-    return f"""
-        <h2>Your shortened URL:</h2>
-        <a href="{short_url}">{short_url}</a>
-        <p><a href="/">Shorten another URL</a></p>
-    """
+    return render_template("result.html", short_url=short_url)
 
 
 @app.route("/<code>")
